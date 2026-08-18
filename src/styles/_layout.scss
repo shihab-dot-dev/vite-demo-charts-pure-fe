@@ -1,0 +1,187 @@
+@use 'variables' as *;
+
+// Outer page padding
+.bh_page {
+  min-height: 100vh;
+  padding: 40px 24px;
+  display: flex;
+  justify-content: center;
+
+  @include bh-below($bh-bp-md) {
+    padding: 20px 12px;
+  }
+}
+
+// The white "sheet" that holds the whole component
+.bh_card {
+  width: 100%;
+  max-width: 1180px;
+  background: $bh-white;
+  border: 1px solid $bh-line;
+  border-radius: $bh-radius-lg;
+  overflow: hidden;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.07);
+}
+
+// ---- Header ---------------------------------------------------------------
+.bh_header {
+  padding: 40px 44px 32px;
+
+  @include bh-below($bh-bp-md) {
+    padding: 28px 22px 20px;
+  }
+}
+
+.bh_header__accent {
+  width: 34px;
+  height: 3px;
+  background: $bh-ink;
+  border-radius: 3px;
+  margin-bottom: 18px;
+}
+
+.bh_header__title {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+
+  @include bh-below($bh-bp-sm) {
+    font-size: 24px;
+  }
+}
+
+.bh_lede {
+  margin-top: 12px;
+  max-width: 720px;
+  color: $bh-muted;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+// ---- Tabs -----------------------------------------------------------------
+.bh_tabs {
+  border-top: 1px solid $bh-line;
+  border-bottom: 1px solid $bh-line;
+  background: $bh-panel;
+  padding: 0 44px;
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+
+  @include bh-below($bh-bp-md) {
+    padding: 0 22px;
+    gap: 20px;
+  }
+}
+
+.bh_tab {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 16px 2px;
+  font-family: $bh-font-head;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $bh-muted;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    color: $bh-ink;
+  }
+
+  &.is-active {
+    color: $bh-ink;
+    border-bottom-color: $bh-ink;
+  }
+}
+
+// ---- Section --------------------------------------------------------------
+.bh_section {
+  padding: 34px 44px 44px;
+  background: $bh-paper;
+
+  @include bh-below($bh-bp-md) {
+    padding: 24px 22px 30px;
+  }
+}
+
+// Title on the left, action buttons on the right
+.bh_section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.bh_section__title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.bh_section__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bh_btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border: 1px solid $bh-line-strong;
+  border-radius: $bh-radius-sm;
+  background: $bh-white;
+  font-family: $bh-font-head;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: $bh-ink;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    border-color: $bh-ink;
+    background: $bh-ink;
+    color: $bh-white;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $bh-ink;
+    outline-offset: 2px;
+  }
+}
+
+.bh_btn__icon {
+  display: inline-flex;
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.bh_section__lede {
+  margin-top: 10px;
+  max-width: 720px;
+  color: $bh-muted;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+// ---- Two-column grid: form (left) + results (right) -----------------------
+.bh_grid {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) 1fr;
+  gap: 26px;
+  align-items: start;
+
+  @include bh-below($bh-bp-lg) {
+    grid-template-columns: 1fr;
+  }
+}

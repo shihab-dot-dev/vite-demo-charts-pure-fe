@@ -1,0 +1,21 @@
+{
+  "name": "benefit-calculator-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wireframe demo of a Demo Calculator component built with Vite, SCSS and Chart.js (pure JS).",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy:surge": "pnpm build && surge dist"
+  },
+  "devDependencies": {
+    "sass": "^1.80.0",
+    "surge": "^0.43.1",
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.0"
+  }
+}
