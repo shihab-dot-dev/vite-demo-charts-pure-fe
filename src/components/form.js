@@ -1,5 +1,4 @@
 // Left-hand form (dummy). Renders selects, the fuel toggle group and inputs.
-import { icons } from '../icons.js';
 import {
   selects,
   fuelToggles,
@@ -35,9 +34,7 @@ function fuelGroup() {
     .map(
       (t, i) => `
       <button type="button" class="bh_toggle${i === 0 ? ' is-active' : ''}"
-              data-fuel="${t.id}" aria-pressed="${i === 0}">
-        <span class="bh_toggle__icon">${icons[t.icon]}</span>${t.label}
-      </button>`
+              data-fuel="${t.id}" aria-pressed="${i === 0}">${t.label}</button>`
     )
     .join('');
 
@@ -63,16 +60,21 @@ export function renderForm() {
 }
 
 // Wire up the fuel toggle group so only one option is active at a time.
-export function bindForm(root) {
+// `onFuelChange(fuelId)` fires only when a *different* fuel is selected.
+export function bindForm(root, onFuelChange) {
   const buttons = root.querySelectorAll('.bh_toggle');
   buttons.forEach((btn) => {
     btn.addEventListener('click', () => {
+      if (btn.classList.contains('is-active')) return; // already selected
+
       buttons.forEach((b) => {
         b.classList.remove('is-active');
         b.setAttribute('aria-pressed', 'false');
       });
       btn.classList.add('is-active');
       btn.setAttribute('aria-pressed', 'true');
+
+      onFuelChange?.(btn.dataset.fuel);
     });
   });
 }

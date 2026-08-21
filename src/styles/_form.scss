@@ -96,10 +96,10 @@
   }
 
   &.is-active {
-    border-color: $bh-ink;
-    color: $bh-ink;
+    border-color: $bh-primary;
+    color: $bh-primary-ink;
     font-weight: 600;
-    box-shadow: inset 0 0 0 1px $bh-ink;
+    box-shadow: inset 0 0 0 1px $bh-primary;
   }
 }
 
@@ -123,9 +123,9 @@
 }
 
 .bh_btn--cta {
-  background: $bh-ink;
+  background: $bh-primary;
   color: $bh-white;
-  border-color: $bh-ink;
+  border-color: $bh-primary;
   padding: 13px 30px;
   font-size: 13px;
   font-weight: 600;
@@ -133,8 +133,8 @@
   text-transform: uppercase;
 
   &:hover {
-    background: $bh-black;
-    border-color: $bh-black;
+    background: $bh-primary-strong;
+    border-color: $bh-primary-strong;
     color: $bh-white;
   }
 }

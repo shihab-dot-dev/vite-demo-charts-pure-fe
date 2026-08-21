@@ -1,9 +1,7 @@
-// Assembles the full Demo Calculator component and wires up interactions.
-import { tabs } from '../data/demoData.js';
-import { icons } from '../icons.js';
+// Assembles the Demo Calculator (scatter variation) and wires up interactions.
 import { renderForm, bindForm } from './form.js';
-import { renderTiles, renderLegend } from './tiles.js';
-import { createMainChart, createPieChart, CHART_TYPES } from './charts.js';
+import { renderTiles } from './tiles.js';
+import { createScatterChart } from './charts.js';
 
 const LEDE =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod ' +
@@ -11,44 +9,12 @@ const LEDE =
   'veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ' +
   'commodo consequat.';
 
-function renderTabs() {
-  return tabs
-    .map(
-      (t, i) =>
-        `<button type="button" class="bh_tab${i === 0 ? ' is-active' : ''}"
-                 role="tab" aria-selected="${i === 0}">${t}</button>`
-    )
-    .join('');
-}
-
 function renderResults() {
   return `
     <div class="bh_results">
       ${renderTiles()}
-      ${renderLegend()}
-      <div class="bh_chart-toolbar">
-        <label class="bh_chart-toolbar__label" for="bh_chartType">Chart type</label>
-        <div class="bh_select-wrap bh_select-wrap--sm">
-          <select class="bh_select bh_select--sm" id="bh_chartType">
-            ${CHART_TYPES.map((t) => `<option value="${t.value}">${t.label}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <div class="bh_chart">
-        <canvas id="bh_mainChart" aria-label="Savings by year chart" role="img"></canvas>
-      </div>
-
-      <div class="bh_charts-split">
-        <div class="bh_chart bh_chart--pie">
-          <canvas id="bh_pieChart" aria-label="Savings composition — pie chart" role="img"></canvas>
-        </div>
-        <div>
-          <p class="bh_chart-caption">Savings composition</p>
-          <p class="bh_chart-subcaption">
-            Doughnut chart demo — share of total projected savings by source
-            (dummy data).
-          </p>
-        </div>
+      <div class="bh_chart bh_chart--scatter">
+        <canvas id="bh_mainChart" aria-label="ROI vs contract duration chart" role="img"></canvas>
       </div>
     </div>`;
 }
@@ -63,25 +29,21 @@ export function renderCalculator() {
           <p class="bh_lede">${LEDE}</p>
         </header>
 
-        <nav class="bh_tabs" role="tablist" aria-label="Sections">
-          ${renderTabs()}
-        </nav>
-
         <section class="bh_section">
           <div class="bh_section__head">
             <h2 class="bh_section__title">Unit Economics</h2>
             <div class="bh_section__actions">
-              <button type="button" class="bh_btn" id="bh_printReport">
-                <span class="bh_btn__icon">${icons.printer}</span>Print this Report
-              </button>
-              <a class="bh_btn" id="bh_docLink" href="#" target="_blank" rel="noopener">
-                <span class="bh_btn__icon">${icons.externalLink}</span>Doc Link
-              </a>
+              <button type="button" class="bh_btn" id="bh_printReport">Print this Report</button>
+              <a class="bh_btn" id="bh_docLink" href="#" target="_blank" rel="noopener">Doc Link</a>
             </div>
           </div>
           <p class="bh_section__lede">${LEDE}</p>
 
           <div class="bh_grid">
+            <div class="bh_loader" id="bh_loader" role="status" aria-live="polite" aria-hidden="true">
+              <div class="bh_spinner"></div>
+              <span class="bh_loader__text">Calculating savings…</span>
+            </div>
             <div class="bh_form-col">
               ${renderForm()}
               <div class="bh_calc-cta">
@@ -95,20 +57,6 @@ export function renderCalculator() {
     </div>`;
 }
 
-function bindTabs(root) {
-  const tabEls = root.querySelectorAll('.bh_tab');
-  tabEls.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      tabEls.forEach((t) => {
-        t.classList.remove('is-active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      tab.classList.add('is-active');
-      tab.setAttribute('aria-selected', 'true');
-    });
-  });
-}
-
 function bindActions(root) {
   // Print — the @media print stylesheet isolates `.bh_section` so only that
   // block ends up on paper.
@@ -117,22 +65,49 @@ function bindActions(root) {
   });
 }
 
+// Simulated latency (ms) before the "API" responds with new figures.
+const FAKE_API_DELAY = 900;
+
 // Mount everything into the given root element.
 export function mountCalculator(root) {
   root.innerHTML = renderCalculator();
-  bindTabs(root);
-  bindForm(root);
   bindActions(root);
 
-  // Main chart is switchable via the type selector; Chart.js needs a fresh
-  // instance when the type changes, so we destroy + recreate on change.
   const mainCanvas = root.querySelector('#bh_mainChart');
-  let mainChart = createMainChart(mainCanvas, 'bar');
+  const loader = root.querySelector('#bh_loader');
 
-  root.querySelector('#bh_chartType')?.addEventListener('change', (e) => {
-    mainChart.destroy();
-    mainChart = createMainChart(mainCanvas, e.target.value);
-  });
+  let chart;
 
-  createPieChart(root.querySelector('#bh_pieChart'));
+  // (Re)draw the chart. `onDrawn` fires when it finishes its initial draw
+  // animation — used to dismiss the loader.
+  function drawChart(onDrawn) {
+    chart?.destroy();
+    chart = createScatterChart(mainCanvas, onDrawn);
+  }
+
+  // Show the loader over the grid, wait out the fake API delay, then rebuild
+  // the chart and hide the loader once it has been drawn.
+  function reloadResults() {
+    loader.classList.add('is-active');
+    loader.setAttribute('aria-hidden', 'false');
+
+    let hidden = false;
+    const hideLoader = () => {
+      if (hidden) return;
+      hidden = true;
+      loader.classList.remove('is-active');
+      loader.setAttribute('aria-hidden', 'true');
+    };
+
+    window.setTimeout(() => {
+      drawChart(hideLoader); // hide when the graph finishes drawing
+      window.setTimeout(hideLoader, 2000); // safety net if the draw never signals
+    }, FAKE_API_DELAY);
+  }
+
+  // Changing the fuel type simulates a fresh API call -> loader + redraw.
+  bindForm(root, () => reloadResults());
+
+  // Initial render (no loader).
+  drawChart();
 }

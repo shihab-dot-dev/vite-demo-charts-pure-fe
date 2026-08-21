@@ -62,11 +62,11 @@
   margin-top: 10px;
   padding: 4px 10px;
   border-radius: 999px;
-  background: $bh-chip;
-  border: 1px solid $bh-line;
+  background: $bh-primary-weak;
+  border: 1px solid rgba($bh-primary, 0.25);
   font-size: 11.5px;
   font-weight: 600;
-  color: $bh-ink;
+  color: $bh-primary-ink;
 }
 
 .bh_badge__spark {
@@ -158,6 +158,16 @@
 
   @include bh-below($bh-bp-sm) {
     height: 260px;
+  }
+}
+
+// Scatter variation: a single, taller chart with more breathing room above.
+.bh_chart--scatter {
+  height: 440px;
+  margin-top: 26px;
+
+  @include bh-below($bh-bp-sm) {
+    height: 340px;
   }
 }
 

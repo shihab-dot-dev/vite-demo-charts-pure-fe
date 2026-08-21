@@ -1,24 +1,31 @@
 // =============================================================
-//  Design tokens — WIREFRAME (plain black / white / grey only).
-//  No brand colours. Swap these later for a themed palette.
+//  Design tokens — BRAND palette (matches the original mockup).
+//  Teal primary, warm/green data series, green ROI badges.
+//  Neutral greys are kept only for text, borders and panels.
 // =============================================================
 
-// --- Greyscale ramp ---------------------------------------------------------
+// --- Neutral ramp (text / lines / surfaces) ---------------------------------
 $bh-white:      #ffffff;
 $bh-paper:      #fbfbfb; // subtle panel background
 $bh-panel:      #f4f4f4; // tab strip / section background
-$bh-chip:       #efefef; // chip / badge fill
-$bh-line:       #e3e3e3; // hairline borders
-$bh-line-strong:#cfcfcf;
-$bh-muted:      #6f6f6f; // secondary text
-$bh-ink-soft:   #3a3a3a;
-$bh-ink:        #141414; // primary text
+$bh-chip:       #efefef; // generic chip fill
+$bh-line:       #e6e8ea; // hairline borders
+$bh-line-strong:#cdd2d6;
+$bh-muted:      #6b7280; // secondary text
+$bh-ink-soft:   #3a3f45;
+$bh-ink:        #14181d; // primary text
 $bh-black:      #0a0a0a;
 
-// --- Chart / data-series greys (3 distinguishable steps) --------------------
-$bh-series-1:   #b4b4b4; // "Fuel"
-$bh-series-2:   #737373; // "Carbon Credits"
-$bh-series-3:   #1f1f1f; // "Total Savings"
+// --- Brand primary (teal-green) ---------------------------------------------
+$bh-primary:        #10a37f; // title accent, active tab, selected states, CTA
+$bh-primary-strong: #0b8266; // hover / emphasis
+$bh-primary-weak:   #e4f5ef; // badge / soft fill background
+$bh-primary-ink:    #0b7256; // text on the soft fill (ROI badge text)
+
+// --- Chart / data-series (from the mockup) ----------------------------------
+$bh-series-1:   #f2a53a; // "Fuel"           — amber
+$bh-series-2:   #16a37c; // "Carbon Credits" — teal-green
+$bh-series-3:   #3d4147; // "Total Savings"  — charcoal
 
 // --- Typography -------------------------------------------------------------
 $bh-font-head:  'Poppins', system-ui, sans-serif;
@@ -40,8 +47,8 @@ $bh-bp-sm: 520px;
   }
 }
 
-// Expose the wireframe palette as CSS custom properties so JS (Chart.js)
-// and runtime styling can read the exact same greys.
+// Expose the palette as CSS custom properties so JS (Chart.js) and runtime
+// styling can read the exact same brand colours.
 :root {
   --bh-white: #{$bh-white};
   --bh-paper: #{$bh-paper};
@@ -53,6 +60,11 @@ $bh-bp-sm: 520px;
   --bh-ink-soft: #{$bh-ink-soft};
   --bh-ink: #{$bh-ink};
   --bh-black: #{$bh-black};
+
+  --bh-primary: #{$bh-primary};
+  --bh-primary-strong: #{$bh-primary-strong};
+  --bh-primary-weak: #{$bh-primary-weak};
+  --bh-primary-ink: #{$bh-primary-ink};
 
   --bh-series-1: #{$bh-series-1};
   --bh-series-2: #{$bh-series-2};

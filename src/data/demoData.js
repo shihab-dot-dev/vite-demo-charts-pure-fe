@@ -61,3 +61,21 @@ export const pieData = {
   labels: ['Fuel', 'Carbon Credits', 'Efficiency / Other'],
   values: [648963, 211329, 96500]
 };
+
+// ---- Scatter chart: ROI (%) vs Contract Duration (years) -------------------
+// Each point renders as a circle with its ROI value labelled inside.
+export const scatterData = {
+  label: 'ROI',
+  points: [
+    { x: 1, y: 157 },
+    { x: 2, y: 275 },
+    { x: 3, y: 344 },
+    { x: 4, y: 388 },
+    { x: 5, y: 419 },
+    { x: 6, y: 442 },
+    { x: 7, y: 460 },
+    { x: 8, y: 474 },
+    { x: 9, y: 486 },
+    { x: 10, y: 495 }
+  ]
+};
